@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio — Clone</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #000;
+      --text: #fff;
+      --muted: rgba(255,255,255,0.65);
+      --accent: #ffffff;
+      --phone-border: rgba(255,255,255,0.95);
+      /* subtle aluminum rim instead of bright white */
+      --phone-border: rgba(255,255,255,0.12);
+    }
+
+    /* Reset */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.4;
+    }
+
+    /* Container */
+    .site {
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      width:100%;
+      overflow-x:hidden;
+    }
+
+    /* TOP NAV */
+    header{
+      width:100%;
+      padding:28px 48px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:fixed;
+      top:0;
+      left:0;
+      z-index:50;
+      background:transparent;
+    }
+
+    .logo {
+      font-weight:800;
+      font-family: "League Spartan", sans-serif;
+      letter-spacing:1px;
+      font-size:28px;
+    }
+
+    nav {
+      display:flex;
+      gap:28px;
+      align-items:center;
+    }
+
+    nav a{
+      font-size:13px;
+      color:var(--muted);
+      text-decoration:none;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      transition:color .18s ease;
+    }
+    nav a:hover{color:var(--accent)}
+
+    .btn-contact{
+      border:1px solid rgba(255,255,255,0.6);
+      padding:8px 14px;
+      border-radius:22px;
+      font-size:13px;
+      color:var(--text);
+      text-decoration:none;
+      margin-left:8px;
+    }
+
+    /* HERO */
+    .hero {
+      width:100%;
+      padding-top:130px; /* space for fixed header */
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:48px;
+    }
+
+    .headline {
+      font-family: "League Spartan", sans-serif;
+      text-transform:uppercase;
+      font-weight:800;
+      font-size:46px;
+      letter-spacing:4px;
+      margin-top:28px;
+      text-align:center;
+    }
+
+    /* phones row */
+    .phones {
+      width:100%;
+      max-width:1100px;
+      display:flex;
+      gap:48px;
+      justify-content:center;
+      align-items:flex-end;
+      padding:28px 32px;
+    }
+
+    .phone {
+      width:200px;
+      height:420px;
+      border-radius:28px;
+      padding:0; /* padding removed, frame will provide rim */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:visible;
+      position:relative;
+      transform:translateY(0);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
+      border:1px solid var(--phone-border);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.65), inset 0 2px 8px rgba(255,255,255,0.02);
+    }
+
+    .phone.center{
+      width:240px;
+      height:490px;
+      border-radius:32px;
+      transform:translateY(-6px);
+    }
+
+    /* white framed rim to emulate iPhone 16 stainless rim */
+    .phone .frame{
+      width:calc(100% - 18px);
+      height:calc(100% - 18px);
+      border-radius:26px;
+  background: #ffffff; /* pure white rim */
+      padding:8px; /* inner gap to screen */
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      z-index:2;
+    }
+
+    /* inner black bezel between rim and screen for realism */
+    .phone .frame::after{
+      content:"";
+      position:absolute;
+      inset:8px;
+      border-radius:18px;
+      box-shadow: inset 0 0 0 4px rgba(0,0,0,0.6);
+      pointer-events:none;
+    }
+
+    .phone .screen {
+      width:100%;
+      height:100%;
+      border-radius:14px; /* inner corner radius */
+      overflow:hidden;
+      background:#000;
+      display:block;
+      position:relative;
+      /* inner bezel to separate glass from rim (gives framed look) */
+      box-shadow: inset 0 0 0 6px rgba(0,0,0,0.45);
+    }
+
+    .phone video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    /* remove external pill, create minimal notch inside the white rim */
+    .phone::before, .phone::after{ display:none; }
+
+    .phone .frame::before{
+      content:"";
+      position:absolute;
+      top:6px; /* inside the rim */
+      left:50%;
+      transform:translateX(-50%);
+      width:56px;
+      height:10px;
+      border-radius:8px;
+      background:#000;
+      z-index:8;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .phone.center .frame::before{
+      width:76px;
+      height:12px;
+      top:8px;
+      border-radius:10px;
+    }
+
+    .phone .frame::after{
+      content:"";
+      position:absolute;
+      top:18px; /* moved lower to match island */
+      left:calc(50% + 28px);
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.06);
+      z-index:9;
+    }
+
+    .phone.center .frame::after{
+      left:calc(50% + 38px);
+      width:7px;height:7px;top:20px;
+    }
+
+    /* hide the pseudo-notch now that we'll use an inline SVG island */
+    .phone .frame::before{ display:none; }
+
+    /* SVG island container (inserted before .screen) */
+    .phone .island{
+      position:absolute;
+      top:14px; /* lowered further */
+      left:50%;
+      transform:translateX(-50%);
+      z-index:10;
+      pointer-events:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .phone .island svg{ display:block; }
+
+  .phone.center .island{ transform:translateX(-50%) scale(1.0); top:16px; }
+
+    /* make the SVG island responsive so it never overflows the rim */
+    .phone .island svg{ max-width:calc(100% - 40px); height:auto; }
+
+
+    /* make center phone a little larger (like in screenshot) */
+    .phone img{
+      width:100%;
+      height:100%;
+     object-fit:cover;
+      display:block;
+      border-radius:14px;
+    }
+
+    .phone img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      border-radius:14px;
+    }
+
+    .phone .screen {
+      width:100%;
+      height:100%;
+      border-radius:14px; /* inner corner radius */
+      overflow:hidden;
+      background:#000;
+      display:block;
+      position:relative;
+      /* inner bezel to separate glass from rim (gives framed look) */
+      box-shadow: inset 0 0 0 6px rgba(0,0,0,0.45);
+    }
+    
+    .phone video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    
+    .phone::before{
+      content:"";
+      position:absolute;
+      top:-6px;
+      left:50%;
+      transform:translateX(-50%);
+      width:80px;
+      height:18px;
+      border-radius:14px;
+      background:var(--bg);
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.08);
+      z-index:5;
+    }
+    /* center phone — larger pill for Dynamic Island look */
+    .phone.center::before{width:140px;height:28px;top:-10px;border-radius:20px}
+    /* small notch / camera cutout imitation (top center) */
+    .phone::before{
+      content:"";
+      position:absolute;
+      top:-6px;
+      left:50%;
+      transform:translateX(-50%);
+      width:80px;
+      height:18px;
+      border-radius:14px;
+      background:var(--bg);
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.08);
+      z-index:5;
+    }
+    .phone.center::before{width:110px;height:20px;top:-8px}
+
+    /* small caption text under phones */
+    .subtext {
+      max-width:760px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      padding:28px 16px 48px;
+      line-height:1.6;
+    }
+
+    /* logos grid */
+    .clients {
+      width:100%;
+      display:flex;
+      justify-content:center;
+      padding:10px 24px 44px;
+    }
+    .clients .grid{
+      padding:0; /* padding removed, frame will provide rim */
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:28px;
+      align-items:center;
+      justify-items:center;
+    }
+
+    .client-logo{
+      filter:grayscale(100%) brightness(180%);
+      opacity:0.95;
+      max-height:84px; /* increased size (was 56px) */
+      width:auto;
+      height:auto;
+      object-fit:contain;
+      transition:transform .18s ease, filter .18s ease, opacity .18s ease;
+    }
+    /* Slight scale and color on hover for emphasis */
+    .client-logo:hover{
+      transform:scale(1.06);
+      filter:none;
+      opacity:1;
+    }
+
+    /* separation / spacing */
+    .spacer{height:40px}
+
+    /* credentials / badges row */
+    .badges {
+      width:100%;
+      display:flex;
+      justify-content:center;
+      padding:20px 12px 36px;
+    }
+    .badges .row{
+      max-width:900px;
+      width:100%;
+      display:flex;
+      gap:36px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .badge {
+      width:140px;
+      text-align:center;
+      opacity:0.98;
+    }
+    .badge img{width:100%; height:auto; display:block}
+
+    /* footer */
+    footer{
+      width:100%;
+      padding:38px 18px 70px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      gap:14px;
+    }
+    .contact {
+      color:var(--muted);
+      font-size:13px;
+    }
+
+        .socials {
+      display:flex;
+      gap:12px;
+      margin-top:6px;
+    }
+    .socials a{
+      display:inline-block;
+      width:36px;height:36px;border-radius:50%;
+      border:1px solid rgba(255,255,255,0.14);
+      display:flex;align-items:center;justify-content:center;
+      color:var(--text); text-decoration:none;
+      font-weight:600;
+    }
+    .socials a img{
+      max-width:60%;
+      max-height:60%;
+      object-fit:contain;
+      display:block;
+    }
+
+
+    /* responsive */
+    @media (max-width:980px){
+      .phones{gap:18px;padding:0 18px}
+      .phone{width:150px;height:340px;border-radius:22px}
+      .phone.center{width:180px;height:400px}
+      .headline{font-size:34px}
+      nav{gap:16px}
+      header{padding:18px 22px}
+
+      /* reduce logo size on medium screens */
+      .client-logo{ max-height:64px; }
+    }
+
+    @media (max-width:640px){
+      header{padding:12px 14px}
+      .logo{font-size:20px}
+      nav a{display:none} /* simplified small header */
+      .hero{padding-top:90px}
+      .phones{flex-wrap:nowrap; gap:16px; transform:translateY(0)}
+      .clients .grid{grid-template-columns:repeat(2,1fr)}
+      .headline{font-size:26px; letter-spacing:3px}
+
+      /* mobile-friendly logo size */
+      .client-logo{ max-height:52px; }
+    }
+  /* center the temporary What We Do block when present */
+  .wrap{max-width:900px;margin:36px auto;text-align:center;color:var(--text)}
+  .wrap h1{font-family:League Spartan, sans-serif; font-weight:800; letter-spacing:2px; text-transform:uppercase; margin-bottom:12px}
+  </style>
+</head>
+<body>
+  <div class="site">
+
+    <!-- HEADER -->
+    <header>
+      <div class="logo">AD</div>
+      <nav>
+        <a href="#home">Home</a>
+        <a class="btn-contact" href="#contact">Get In Touch</a>
+      </nav>
+    </header>
+
+    <!-- HERO / MAIN -->
+    <main id="home" class="hero">
+      <h1 class="headline">RESHAPING REALITIES</h1>
+
+      <!-- phones row -->
+      <section class="phones" aria-label="featured-phone-examples">
+        <!-- Phone 1 -->
+        <figure class="phone">
+          <div class="frame">
+            <div class="island" aria-hidden="true">
+              <!-- small SVG island: pill + camera hole -->
+              <svg width="120" height="30" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="0" y="0" rx="14" ry="14" width="120" height="30" fill="#000" />
+                <circle cx="90" cy="15" r="4" fill="#0b0b0b" opacity="0.95" />
+              </svg>
+            </div>
+            <div class="screen">
+              <!-- Replace src with your video files; muted + playsinline needed for autoplay on many browsers -->
+              <video src="/Videos/WhatsApp Video 2025-09-26 at 12.17.30_08f17260.mp4" autoplay muted loop playsinline poster="/images/video1-poster.jpg"></video>
+            </div>
+          </div>
+        </figure>
+
+        <!-- Center phone (bigger) -->
+        <figure class="phone center">
+          <div class="frame">
+            <div class="island" aria-hidden="true">
+              <svg width="100" height="26" viewBox="0 0 100 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="0" y="0" rx="13" ry="13" width="100" height="26" fill="#000" />
+                <circle cx="74" cy="13" r="4" fill="#0b0b0b" opacity="0.95" />
+              </svg>
+            </div>
+            <div class="screen">
+              <video src="/videos/WhatsApp Video 2025-10-21 at 15.52.36_ec9359a5.mp4" autoplay muted loop playsinline poster="/images/video2-poster.jpg"></video>
+            </div>
+          </div>
+        </figure>
+
+        <!-- Phone 3 -->
+        <figure class="phone">
+          <div class="frame">
+            <div class="island" aria-hidden="true">
+              <svg width="120" height="30" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="0" y="0" rx="14" ry="14" width="120" height="30" fill="#000" />
+                <circle cx="90" cy="15" r="4" fill="#0b0b0b" opacity="0.95" />
+              </svg>
+            </div>
+            <div class="screen">
+              <video src="/videos/WhatsApp Video 2025-09-26 at 12.33.59_a9f2acb2.mp4" autoplay muted loop playsinline poster="/images/video3-poster.jpg"></video>
+            </div>
+          </div>
+        </figure>
+      </section>
+
+      <!-- short intro -->
+      <p class="subtext">Ahmad worked with brands all over the world to help them develop memorable experiences.</p>
+
+      <!-- clients logos -->
+      <section class="clients" aria-label="clients">
+        <div class="grid">
+          <!-- Replace these images with real client logos (preferably white PNGs) -->
+          <img class="client-logo" src="/images/snoonu.png" alt="Snoonu">
+          <img class="client-logo" src="/images/ooredoo-black-link-post-banner-1707775581.png.webp" alt="ooredoo">
+          <img class="client-logo" src="/images/dk edited.PNG" alt="Dukan Bank">
+
+          <img class="client-logo" src="/images/463417840_8398701850164772_2483151710334778064_n.png" alt="AspireZone">
+          <img class="client-logo" src="/images/bmm.PNG" alt="arab bank">
+          <img class="client-logo" src="/images/qa2.PNG" alt="AspireZone">
+
+          <div style="height:56px"></div>
+        </div>
+      </section>
+<div class="wrap">
+    <h1>What We Do</h1>
+    <p>We transform the future of your brand through immersive experiences.</p>
+  </div>
+      <div class="spacer"></div>
+
+      <!-- small paragraph and badges -->
+      <p class="subtext">Ahmad has advanced proficiency, professional experience and skills required to develop and publish effects and experiences over social platforms.</p>
+
+      <section class="badges" aria-label="badges">
+        <div class="row">
+          <!-- Replace src with your badge images -->
+          <div class="badge"><img src="/images/SnapDev.jpeg" alt="Snap Developer"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+      <div class="contact">ahmadattodk2@gmail.com</div>
+
+                  <div class="socials" aria-label="social links">
+        <a href="https://instagram.com/yourhandle" aria-label="instagram" target="_blank" rel="noopener noreferrer">
+          <img src="/images/ig.avif" alt="Instagram">
+        </a>
+        <a href="https://www.linkedin.com/in/yourhandle" aria-label="linkedin" target="_blank" rel="noopener noreferrer">
+          <img src="/images/linkedin.avif" alt="LinkedIn">
+        </a>
+      </div>
+
+    </footer>
+
+  </div>
+
+  <!-- Minimal JS: smooth scrolling (optional) -->
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', function(e){
+        const target = document.querySelector(this.getAttribute('href'));
+        if(target){
+          e.preventDefault();
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      });
+    });
+  </script>
+</body>
+</html>
