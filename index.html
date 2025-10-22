@@ -448,6 +448,10 @@
 
       /* mobile-friendly logo size */
       .client-logo{ max-height:52px; }
+      /* show only the center phone on small screens to avoid overlap */
+      .phones { justify-content:center; }
+      .phone { display:none; }
+      .phone.center { display:flex; }
     }
   /* center the temporary What We Do block when present */
   .wrap{max-width:900px;margin:36px auto;text-align:center;color:var(--text)}
@@ -561,9 +565,10 @@
       <div class="contact">ahmadattodk2@gmail.com</div>
 
                   <div class="socials" aria-label="social links">
-        <a href="https://www.instagram.com/ahmad_dk5/" aria-label="instagram" target="_blank" rel="noopener noreferrer">
+        <a href="https://instagram.com/yourhandle" aria-label="instagram" target="_blank" rel="noopener noreferrer">
           <img src="images/ig.avif" alt="Instagram">
         </a>
+
 
     </footer>
 
@@ -583,6 +588,3 @@
   </script>
 </body>
 </html>
-
-
-
